@@ -1,0 +1,32 @@
+// static/script.js
+document.getElementById('show-rankings').addEventListener('click', function() {
+    fetch('/rank_students')
+        .then(response => response.json())
+        .then(data => {
+            const rankingsList = document.getElementById('student-rankings');
+            rankingsList.innerHTML = '';
+            data.slice(0, 3).forEach(student => {
+                const li = document.createElement('li');
+                li.textContent = `${student.name} - Score: ${student.score.toFixed(2)}`;
+                rankingsList.appendChild(li);
+            });
+        });
+});
+
+document.getElementById('add-student-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+
+    fetch('/add_student', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        event.target.reset();
+    });
+});

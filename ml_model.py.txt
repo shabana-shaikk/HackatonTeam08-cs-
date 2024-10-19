@@ -1,0 +1,26 @@
+# ml_model.py
+import numpy as np
+from sklearn.linear_model import LinearRegression
+
+def calculate_rankings(students):
+    data = []
+    for student in students:
+        features = [
+            student.gpa,
+            student.core_course_performance,
+            student.hackathon_participation,
+            student.paper_presentations,
+            student.teaching_assistance
+        ]
+        data.append(features)
+    
+    # Simulate some rankings (In a real system, you would have historical data)
+    # Weights: GPA(0.4), Core Courses(0.3), Hackathons(0.1), Papers(0.1), Assistance(0.1)
+    X = np.array(data)
+    y = X.dot(np.array([0.4, 0.3, 0.1, 0.1, 0.1]))  # Custom weights for each feature
+    
+    # Sort students by rank
+    sorted_students = sorted(zip(students, y), key=lambda x: x[1], reverse=True)
+    
+    rankings = [{"name": student.name, "score": score} for student, score in sorted_students]
+    return rankings
